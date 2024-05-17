@@ -40,7 +40,9 @@ export const PokemonCard = ({ pokemon }: Props) => {
           key={pokemon.id}
         />
         {/* Types pokémon */}
-        <Text style={[styles.name, { marginTop: 35 }]}>{pokemon.types[0]}</Text>
+        <Text style={[styles.name, { marginTop: 35 }]}>
+          {Formatter.capitalize(pokemon.types[0])}
+        </Text>
       </Card>
     </Pressable>
   );
