@@ -64,7 +64,7 @@ export const PokemonScreen = ({ navigation, route }: Props) => {
             mode="outlined"
             selectedColor="white"
             style={{ marginLeft: 10 }}>
-            {type}
+            {Formatter.capitalize(type)}
           </Chip>
         ))}
       </View>
@@ -86,6 +86,60 @@ export const PokemonScreen = ({ navigation, route }: Props) => {
             style={{ width: 100, height: 100, marginHorizontal: 5 }}
           />
         )}
+      />
+      {/* Abilities */}
+      <Text style={styles.subTitle}>Abilities</Text>
+      <FlatList
+        data={pokemon.abilities}
+        renderItem={({ item }) => (
+          <Chip selectedColor="white">{Formatter.capitalize(item)}</Chip>
+        )}
+        horizontal
+        keyExtractor={item => item}
+        showsHorizontalScrollIndicator={false}
+      />
+      {/* Stats */}
+      <Text style={styles.subTitle}>Stats</Text>
+      <FlatList
+        data={pokemon.stats}
+        keyExtractor={item => item.name}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <View style={styles.statsContainer}>
+            <Text style={{ flex: 1, color: 'white' }}>
+              {Formatter.capitalize(item.name)}
+            </Text>
+            <Text style={{ color: 'white' }}>{item.value}</Text>
+          </View>
+        )}
+      />
+      {/* Moves */}
+      <Text style={styles.subTitle}>Moves</Text>
+      <FlatList
+        data={pokemon.moves}
+        keyExtractor={item => item.name}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <View style={styles.statsContainer}>
+            <Text style={{ flex: 1, color: 'white' }}>
+              {Formatter.capitalize(item.name)}
+            </Text>
+            <Text style={{ color: 'white' }}>lvl {item.level}</Text>
+          </View>
+        )}
+      />
+      {/* Games */}
+      <Text style={styles.subTitle}>Games</Text>
+      <FlatList
+        data={pokemon.games}
+        renderItem={({ item }) => (
+          <Chip selectedColor="white">{Formatter.capitalize(item)}</Chip>
+        )}
+        horizontal
+        keyExtractor={item => item}
+        showsHorizontalScrollIndicator={false}
       />
 
       <View style={{ height: 100 }} />

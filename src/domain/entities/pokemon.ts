@@ -5,6 +5,8 @@
 //! no tengo qué cambiar todos mis componentes donde utilizo la información, solo cambio la forma en que el mapper (siguiente paso)
 //! factoriza la información.
 
+//! Paso 2 - Mapper.
+
 export interface Pokemon {
   id: number;
   name: string;
@@ -13,4 +15,19 @@ export interface Pokemon {
   sprites: string[]; //* En la API vienen como un objeto con un montón de properties, pero yo lo voy a formatear de otra forma.
   //
   color: string;
+
+  //
+  games: string[];
+  abilities: string[];
+  stats: Stat[];
+  moves: Move[];
+}
+
+export interface Stat {
+  name: string;
+  value: number;
+}
+export interface Move {
+  name: string;
+  level: number; //! Primer nivel
 }
