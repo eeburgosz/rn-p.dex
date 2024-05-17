@@ -1,10 +1,13 @@
+import { getColorFromImage } from '../../config/helpers/get-color';
 import { Pokemon } from '../../domain/entities/pokemon';
 import { PokeAPIPokemon } from '../interfaces/pokeapi.interfaces';
 
 export class PokemonMapper {
-  static pokeApiPokemonToEntity(data: PokeAPIPokemon): Pokemon {
+  static async pokeApiPokemonToEntity(data: PokeAPIPokemon): Promise<Pokemon> {
     const sprites = PokemonMapper.getSprites(data);
     const avatar = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${data.id}.png`;
+
+    const color = await getColorFromImage(avatar);
 
     return {
       id: data.id,
@@ -12,6 +15,8 @@ export class PokemonMapper {
       avatar: avatar,
       types: data.types.map(type => type.type.name),
       sprites: sprites,
+      //! El color retorna una promesa, por lo que ahora hay qué cambiar la estructura de la acción get-pokemons.ts
+      color: color,
     };
   }
 

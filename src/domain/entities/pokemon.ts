@@ -11,7 +11,6 @@ export interface Pokemon {
   types: string[]; //* En la API, los types vienen como un arreglo de objetos anindados. Para este caso usaré los mappers.
   avatar: string;
   sprites: string[]; //* En la API vienen como un objeto con un montón de properties, pero yo lo voy a formatear de otra forma.
-
-  //todo:
-  //color: string;
+  //
+  color: string;
 }

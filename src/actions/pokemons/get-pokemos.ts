@@ -30,8 +30,8 @@ export const getPokemons = async (
     //! La siguiente respuesta me trae todos los pokemones de la forma en que me los manda la API. En este punto debo crear un mapper para formatear toda la info que llega de forma que cumpla con mi entity.
     const pokeApiPokemons = await Promise.all(pokemonPromises);
     //! Aplicando el mapper. El mapper va dentro del map porque se debe aplicar a cada uno de los items que trae "pokeApiPokemons"
-    //! ---------- Usando la clase del mapper.
-    const pokemons = pokeApiPokemons.map(resp =>
+    //! ---------- Usando la clase del mapper. EDIT: Cambió de "pokemos" a "pokemosPromises" luego de agregar el color en las entities.
+    const pokemonsPromises = pokeApiPokemons.map(resp =>
       PokemonMapper.pokeApiPokemonToEntity(resp.data),
     );
 
@@ -40,7 +40,7 @@ export const getPokemons = async (
     //   pokeApiPokemonToEntity(resp.data),
     // );
     // console.log(pokemons[0]);
-    return pokemons;
+    return await Promise.all(pokemonsPromises);
   } catch (error) {
     throw new Error('Error getting pokemons');
   }
