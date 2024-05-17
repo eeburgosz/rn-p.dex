@@ -9,7 +9,7 @@ export const getColorFromImage = async (image: string) => {
 
   switch (colors.platform) {
     case 'android':
-      return colors.dominant ?? fallbackColor;
+      return colors.average ?? fallbackColor;
     case 'ios':
       return colors.background ?? fallbackColor;
     default:
