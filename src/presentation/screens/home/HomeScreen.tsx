@@ -1,17 +1,22 @@
 import React from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, Button, Text } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-paper';
 import { getPokemons } from '../../../actions/pokemons';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { PokeballBg } from '../../components/ui/PokeballBg';
 import { FlatList } from 'react-native-gesture-handler';
-import { Pokemon } from '../../../domain/entities/pokemon';
 import { globalTheme } from '../../../config/theme/global-theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PokemonCard } from '../../components/pokemons/PokemonCard';
 
 export const HomeScreen = () => {
   const { top } = useSafeAreaInsets();
+  //! (*)
+  const queryClient = useQueryClient();
 
   //! Forma tradicional de una petición HTTP.
   // const { isLoading, data: pokemons = [] } = useQuery({
@@ -26,9 +31,17 @@ export const HomeScreen = () => {
     //* data queda sin tipo porque ya no es de solo Pokemons
     queryKey: ['pokemons', 'infinite'],
     initialPageParam: 0, //* Página inicial.
-    queryFn: params => getPokemons(params.pageParam),
-    getNextPageParam: (lastPage, pages) => pages.length,
     staleTime: 1000 * 60 * 60,
+    // queryFn: params => getPokemons(params.pageParam),
+    //! (*) Este paso no es necesario, pero lo hago para evitar volver a hacer la petición cuando entro a un item por primera vez.
+    queryFn: async params => {
+      const pokemons = await getPokemons(params.pageParam);
+      pokemons.forEach(pokemon => {
+        queryClient.setQueryData(['pokemon', pokemon.id], pokemon);
+      });
+      return pokemons;
+    },
+    getNextPageParam: (lastPage, pages) => pages.length,
   });
 
   // console.log(data); //! [[],[],[],[],[],...]
