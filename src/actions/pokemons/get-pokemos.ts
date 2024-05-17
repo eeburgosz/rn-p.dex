@@ -19,7 +19,7 @@ export const getPokemons = async (
 ): Promise<Pokemon[]> => {
   // await sleep();
   try {
-    const url = `/pokemon?offset=${page * 10}&limit=${limit}`; //! Por como trabaja la API, pongo page*10. Si recibo 0, tengo 0. Si recibo 1, tengo 10
+    const url = `/pokemon?offset=${page * 20}&limit=${limit}`; //! Por como trabaja la API, pongo page*10. Si recibo 0, tengo 0. Si recibo 1, tengo 10
     const { data } = await pokeApi.get<PokeAPIPaginatedResponse>(url); //! Esta respuesta esperada es la interface creada a partir de la respuesta que da Postman a esa URL.
 
     //! En el siguiente paso, si bien es una petición asíncrona, no la hago con async-await porque son 20 peticiones y las haría una por una. Prefiero obtener una promesa y luego hacer las 20 peticiones en simultáneo.
