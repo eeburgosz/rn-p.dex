@@ -11,11 +11,13 @@ import {
   getPokemonsByIds,
 } from '../../../actions/pokemons';
 import { FullScreenLoader } from '../../components/ui/FullScreenLoader';
+import { useDebouncedValue } from '../../hooks/useDebouncedValue';
 
 export const SearchScreen = () => {
   const { top } = useSafeAreaInsets();
-
   const [term, setTerm] = useState('');
+
+  const { debouncedValue } = useDebouncedValue(term);
 
   const { isLoading, data: pokemonNameList = [] } = useQuery({
     queryKey: ['pokemons', 'all'],
@@ -27,18 +29,18 @@ export const SearchScreen = () => {
   //Todo: Aplicar debouncer
   const pokemonNameIdList = useMemo(() => {
     //* Si es un número
-    if (!isNaN(Number(term))) {
+    if (!isNaN(Number(debouncedValue))) {
       const pokemon = pokemonNameList.find(
-        pokemon => pokemon.id === Number(term),
+        pokemon => pokemon.id === Number(debouncedValue),
       );
       return pokemon ? [pokemon] : [];
     }
-    if (term.length === 0) return [];
-    if (term.length < 3) return [];
+    if (debouncedValue.length === 0) return [];
+    if (debouncedValue.length < 3) return [];
     return pokemonNameList.filter(pokemon =>
-      pokemon.name.includes(term.toLocaleLowerCase()),
+      pokemon.name.includes(debouncedValue.toLocaleLowerCase()),
     );
-  }, [term]);
+  }, [debouncedValue]);
 
   const { isLoading: isLoadingPokemons, data: pokemons = [] } = useQuery({
     queryKey: ['pokemons', 'by', pokemonNameIdList],
@@ -61,7 +63,7 @@ export const SearchScreen = () => {
       />
       {isLoadingPokemons && <ActivityIndicator style={{ paddingTop: 20 }} />}
 
-      {/* <Text>{JSON.stringify(pokemonNameIdList, null, 2)}</Text> */}
+      {/* <Text>{JSON.stringify(pokemonNameIdList, null, 4)}</Text> */}
 
       <FlatList
         data={pokemons}
